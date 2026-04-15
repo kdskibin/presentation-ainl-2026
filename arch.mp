@@ -1,19 +1,8 @@
+verbatimtex
 \documentclass{beamer}
-
-\usepackage[russian]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage{cmap}
-\usepackage{graphicx}
-\usepackage{xspace}
-\usepackage{psfrag}
-\usepackage{hyperref}
-\usepackage[normalem]{ulem}
+\renewcommand{\arraystretch}{0.7}
 
-\beamertemplatenavigationsymbolsempty
-\setbeamertemplate{footline}[frame number]
-\usecolortheme{seahorse}
-
-%%Исправляем греческие буквы в формулах, они должны быть прямыми, а не курсивными
 \DeclareSymbolFont{greek}{U}{eur}{m}{n}                                                        
 \SetSymbolFont{greek}{bold}{U}{eur}{b}{n}                                                      
 \DeclareSymbolFontAlphabet{\gr}{greek}                                                         
@@ -45,20 +34,65 @@
 \DeclareMathSymbol{\varpi}{\mathord}{greek}{"24}                                               
 \let\varrho\rho                                                                                
 \let\varsigma\sigma                                                                            
-\DeclareMathSymbol{\varphi}{\mathord}{greek}{"27}
-
-\title{A Multi-head-based architecture for effective morphological tagging in Russian with open dictionary}
-\author{Skibin K., Pozhidaev M., Suschenko S.}
-\date{April 18, 2026}
+\DeclareMathSymbol{\varphi}{\mathord}{greek}{"27}                                              
 
 \begin{document}
-\maketitle
 
-\begin{frame}
-\frametitle{PyTorch pipeline}
-\begin{figure}[h]
-\includegraphics[width=9cm,height=5cm,keepaspectratio]{arch.pdf}
-\end{figure}
-\end{frame}
+etex
 
-\end{document}
+filenametemplate "arch.mps";
+beginfig(1)
+
+def BW = 2.2cm enddef;
+def BH = 0.8cm enddef;
+def HS = 1.3cm enddef;
+def WS = 3.0cm enddef;
+def RAD = 0.1cm enddef;
+color fillcol;
+fillcol = (.8, .8, 1.0);
+
+drawarrow (BW / 2, BH + RAD) -- (BW / 2, HS - RAD);
+
+drawarrow (BW / 2, BH + RAD + HS) -- (BW / 2, (2 * HS) - RAD);
+drawarrow (BW / 2, BH + RAD + HS) -- (BW * 0.25, (2 * HS) - RAD);
+drawarrow (BW / 2, BH + RAD + HS) -- (BW * 0.75, (2 * HS) - RAD);
+
+
+drawarrow (BW / 2, BH + RAD + (2 * HS)) -- (BW / 2, (3 * HS) - RAD);
+
+%%Second column
+drawarrow (BW + RAD, (BH / 2) + (3 * HS)) -- (WS - RAD, (BH / 2) + (3 * HS));
+drawarrow (BW + RAD, (BH / 2) + (3 * HS)) -- (WS - RAD, (BH * 0.25) + (3 * HS));
+drawarrow (BW + RAD, (BH / 2) + (3 * HS)) -- (WS - RAD, (BH * 0.75) + (3 * HS));
+
+drawarrow (BW / 2 + WS, (3 * HS) - RAD) -- (BW / 2 + WS, BH + RAD + (2 * HS));
+drawarrow (BW / 2 + WS, (2 * HS) - RAD) -- (BW / 2 + WS, BH + RAD + HS);
+drawarrow (BW / 2 + WS, HS - RAD) -- (BW / 2 + WS, BH + RAD);
+
+
+
+
+for i=0 upto 3:
+  fill (0, i * HS) -- (0, i * HS + BH) -- (BW, i * HS + BH) -- (BW, i * HS) -- cycle withcolor fillcol;
+  fill (WS, i * HS) -- (WS, i * HS + BH) -- (BW + WS, i * HS + BH) -- (BW + WS, i * HS) -- cycle withcolor fillcol;
+endfor;
+
+pickup pencircle scaled (RAD * 2);
+for i=0 upto 3:
+  draw (0, i * HS) -- (0, i * HS + BH) -- (BW, i * HS + BH) -- (BW, i * HS) -- cycle withcolor fillcol;
+  draw (WS, i * HS) -- (WS, i * HS + BH) -- (BW + WS, i * HS + BH) -- (BW + WS, i * HS) -- cycle withcolor fillcol;
+endfor;
+
+
+
+label(btex {\tiny \begin{tabular}{@{}c@{}} Token\\embeddings\end{tabular}} etex, (BW / 2, BH / 2));
+label(btex {\tiny \begin{tabular}{@{}c@{}} Positional encoding\\for subwords \end{tabular}} etex, (BW / 2, (BH / 2) + HS));
+label(btex {\tiny \begin{tabular}{@{}c@{}} Subwords tokens\\agregation \end{tabular}} etex, (BW / 2, (BH / 2) + (HS * 2)));
+label(btex {\tiny \begin{tabular}{@{}c@{}} Positional encoding\\for words \end{tabular}} etex, (BW / 2, (BH / 2) + (3 * HS)));
+
+label(btex {\tiny \begin{tabular}{@{}c@{}} Final probability\\of grammatical \\ categories \end{tabular}} etex, (BW / 2 + WS, BH / 2));
+label(btex {\tiny \begin{tabular}{@{}c@{}} Feed-forward networks\\for classification  \end{tabular}} etex, (BW / 2 + WS, (BH / 2) + HS));
+label(btex {\tiny \begin{tabular}{@{}c@{}} Normalization  \end{tabular}} etex, (BW / 2 + WS, (BH / 2) + (HS * 2)));
+label(btex {\tiny \begin{tabular}{@{}c@{}} Multiple layers\\of the coder \end{tabular}} etex, (BW / 2 + WS, (BH / 2) + (3 * HS)));
+
+endfig;
