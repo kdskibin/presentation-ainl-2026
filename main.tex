@@ -8,6 +8,7 @@
 \usepackage{psfrag}
 \usepackage{hyperref}
 \usepackage[normalem]{ulem}
+\usepackage{multicol}
 
 \beamertemplatenavigationsymbolsempty
 \setbeamertemplate{footline}[frame number]
@@ -98,45 +99,106 @@ then 10 more epochs of learning rate 1e-5.
 \end{frame}
 
 \begin{frame}
-  \frametitle{Computational experiment}
+  \frametitle{Datasets}
+  \framesubtitle{  UD SynTagRus ver.~2.16 and UD Taiga ver.~2.17}
 
-  \begin{table*}[tb]
+      \begin{columns}[T]
+      \begin{column}{0.48\textwidth}
+
+SynTagRus samples:
+  
+  \begin{itemize}
+ \item { 
+Train:
+69629 sentences  total,
+1205821 words total,
+average sentence length is  17.32 words
+}
+\item {
+Dev:
+ 8906 sentences total,
+153585 words total,
+average sentence length is  17.25 words
+}
+\item {
+Test:
+ 8800 sentences total,
+157978 words total,
+average sentence length is  17.95 words
+}
+  \end{itemize}
+      \end{column}
+
+            \begin{column}{0.48\textwidth}
+
+Taiga samples:
+  
+\begin{itemize}
+  \item {
+Train:
+119407 sentences total,
+1717332 words total,
+average sentence length is  14.38 words
+}
+\item {
+Dev:
+1260 sentences total,
+15624 words total,
+average sentence length is  12.4 words
+}
+\item {
+Test:
+1217 sentences total,
+15440 words total,
+average sentence length is 12.69 words
+}
+\end{itemize}
+            \end{column}
+            \end{columns}
+
+
+  
+
+  \end{frame}
+
+\begin{frame}
+  \frametitle{Computational experiment}
+  \  framesubtitle{Accuracy, recall and other metrics for~classification}
+
+  \begin{table}[tb]
   \centering
   \begin{tabular}{r|ccccc}
     Feature & Accuracy & \begin{tabular}{@{}c@{}} Sentence  \\ accuracy \end{tabular} & Precision & Recall & F1 \\
     \hline \\
  upos & 0.98463 & 0.77898 & 0.96833 & 0.96679 & 0.96684  \\
-head & 0.91923 & 0.48346 & 0.88273 & 0.88545 & 0.87740  \\
-deprel & 0.94271 & 0.47067 & 0.82724 & 0.84452 & 0.82797  \\
+%head & 0.91923 & 0.48346 & 0.88273 & 0.88545 & 0.87740  \\
+%deprel & 0.94271 & 0.47067 & 0.82724 & 0.84452 & 0.82797  \\
 Mood & 0.99874 & 0.97944 & 0.94718 & 0.96784 & 0.95057  \\
-NumType & 0.99758 & 0.96008 & 0.85935 & 0.90408 & 0.87672  \\
+%NumType & 0.99758 & 0.96008 & 0.85935 & 0.90408 & 0.87672  \\
 VerbForm & 0.99781 & 0.96325 & 0.98734 & 0.98938 & 0.98805  \\
 ExtPos & 0.99828 & 0.97152 & 0.74604 & 0.79496 & 0.75973  \\
-Reflex & 0.99974 & 0.99558 & 0.97378 & 0.99896 & 0.98476  \\
-Polarity & 0.99443 & 0.91508 & 0.70643 & 0.80416 & 0.73642  \\
-Typo & 0.99997 & 0.99954 & 0.97825 & 0.97825 & 0.97825  \\
-NameType & 0.99388 & 0.90930 & 0.74352 & 0.73691 & 0.72995  \\
-InflClass & 0.99851 & 0.97780 & 0.93738 & 0.84559 & 0.87151  \\
-Person & 0.99861 & 0.97610 & 0.99460 & 0.98794 & 0.99062  \\
-Poss & 0.99927 & 0.98720 & 0.96347 & 0.99191 & 0.97625  \\
-Animacy & 0.98732 & 0.81833 & 0.97048 & 0.96883 & 0.96951  \\
+%Reflex & 0.99974 & 0.99558 & 0.97378 & 0.99896 & 0.98476  \\
+%Polarity & 0.99443 & 0.91508 & 0.70643 & 0.80416 & 0.73642  \\
+%Typo & 0.99997 & 0.99954 & 0.97825 & 0.97825 & 0.97825  \\
+%NameType & 0.99388 & 0.90930 & 0.74352 & 0.73691 & 0.72995  \\
+%InflClass & 0.99851 & 0.97780 & 0.93738 & 0.84559 & 0.87151  \\
+%Person & 0.99861 & 0.97610 & 0.99460 & 0.98794 & 0.99062  \\
+%Poss & 0.99927 & 0.98720 & 0.96347 & 0.99191 & 0.97625  \\
+%Animacy & 0.98732 & 0.81833 & 0.97048 & 0.96883 & 0.96951  \\
 Degree & 0.99115 & 0.86345 & 0.90006 & 0.92511 & 0.90894  \\
-Foreign & 0.99947 & 0.99241 & 0.94309 & 0.88598 & 0.90439  \\
-Variant & 0.99930 & 0.98816 & 0.98418 & 0.99008 & 0.98686  \\
-Number & 0.99097 & 0.86803 & 0.98990 & 0.98949 & 0.98968  \\
+%Foreign & 0.99947 & 0.99241 & 0.94309 & 0.88598 & 0.90439  \\
+%Variant & 0.99930 & 0.98816 & 0.98418 & 0.99008 & 0.98686  \\
+%Number & 0.99097 & 0.86803 & 0.98990 & 0.98949 & 0.98968  \\
 Gender & 0.98663 & 0.81431 & 0.98090 & 0.97924 & 0.98000  \\
 NumForm & 0.99829 & 0.97180 & 0.94471 & 0.97535 & 0.95617  \\
 Aspect & 0.99686 & 0.94701 & 0.98643 & 0.98754 & 0.98691  \\
 Case & 0.98395 & 0.79896 & 0.96960 & 0.96860 & 0.96895  \\
 PronType & 0.99495 & 0.91836 & 0.90288 & 0.90052 & 0.89366  \\
-Tense & 0.99724 & 0.95323 & 0.97064 & 0.97289 & 0.97033  \\
-Abbr & 0.99868 & 0.98001 & 0.84428 & 0.89351 & 0.85648  \\
+%Tense & 0.99724 & 0.95323 & 0.97064 & 0.97289 & 0.97033  \\
+%Abbr & 0.99868 & 0.98001 & 0.84428 & 0.89351 & 0.85648  \\
 Voice & 0.99579 & 0.92929 & 0.96404 & 0.96103 & 0.96189  \\
       \end{tabular}
-\end{table*}
-
-\  framesubtitle{Accuracy, recall and other metrics for~classification}
-
+\end{table}
   \end{frame}
 
 \begin{frame}
