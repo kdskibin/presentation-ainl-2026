@@ -55,10 +55,32 @@
 \maketitle
 
 \begin{frame}
-\frametitle{PyTorch pipeline}
+  \frametitle{Calculation procedure}
+  \framesubtitle{Steps for classification }
+
+  
+\begin{enumerate}
+\item{The positional encoding (RoPE) is applied to each token.}
+\item{The dot product attention is calculated inside each word for ~tokens included inthe~word.}
+\item{Calculation of the score of the tokens within the~word.}
+\item{The vectors of token representation within a single word are aggregated.}
+\item{The application of positional encoding is repeated once again.}
+\item{The resulting tensor is processed by four transformer encoder blocks.}
+\item{The obtained encoding results are processed by a feed-forward network with ~ one hidden layer.}
+\end{enumerate}
+  \end{frame}
+
+\begin{frame}
+  \frametitle{Proposed pipeline}
+  \framesubtitle{Graphical explanation of proposed architecture}
 \begin{figure}[h]
 \includegraphics[width=9cm,height=5cm,keepaspectratio]{arch.pdf}
 \end{figure}
 \end{frame}
+
+\begin{frame}
+
+  \frametitle{Thank you!}
+  \end{frame}
 
 \end{document}
