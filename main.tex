@@ -14,6 +14,11 @@
 \setbeamertemplate{footline}[frame number]
 \usecolortheme{seahorse}
 
+%% 1. Убрать номер страницы с первого слайда
+%% 2. Попробовать изменить цветовую схему на AINL
+%%
+%%
+
 %%Исправляем греческие буквы в формулах, они должны быть прямыми, а не курсивными
 \DeclareSymbolFont{greek}{U}{eur}{m}{n}                                                        
 \SetSymbolFont{greek}{bold}{U}{eur}{b}{n}                                                      
@@ -48,16 +53,29 @@
 \let\varsigma\sigma                                                                            
 \DeclareMathSymbol{\varphi}{\mathord}{greek}{"27}
 
+
+\begin{frame}[plain]{Title}
 \title{A Multi-head-based architecture for effective morphological tagging in Russian with open dictionary}
 \author{Skibin K., Pozhidaev M., Suschenko S.}
 \date{April 18, 2026}
+\end{frame}
 
 \begin{document}
 \maketitle
 
+
+\begin{frame}
+\frametitle{Problem and Motivation}
+\begin{itemize}
+\item Morphological tagging = automatic assignment of grammatical features
+\item Important for: MT, information extraction, audiobook stress positioning
+\item Closed-vocabulary models fail on unseen words
+\end{itemize}
+
+
 \begin{frame}
 \frametitle{Morphological tagging}
-\framesubtitle{Why multi-head attention?}
+\framesubtitle{  Why multi-head attention?}
 
 \begin{exampleblock}{Open dictionary}
 No methods that do not support an open dictionary were considered.
@@ -74,117 +92,136 @@ BERT implies a~heavy training process, although it also contains multi-head atte
 \end{exampleblock}
 \end{frame}
 
-\begin{frame}
-\frametitle{Calculation procedure}
-\framesubtitle{Steps for classification }
 
-  
-\begin{enumerate}
-\item{The~positional encoding (RoPE) is applied to~each token.}
-\item{The~dot product attention is calculated inside each word for~~tokens included in~the~word.}
-\item{Calculation of~the~score of~the~tokens within the~word.}
-\item{Thvectors of~token representation within a~single word are aggregated.}
-\item{The~application of positional encoding is repeated once again.}
-\item{The~resulting tensor is processed by~four transformer encoder blocks.}
-\item{The obtained encoding results are processed by a feed-forward network with ~ one hidden layer.}
-\end{enumerate}
-\end{frame}
+% \begin{frame}
+% \frametitle{Calculation procedure}
+% \framesubtitle{Steps for classification}
+% \begin{enumerate}
+% \item{The~positional encoding (RoPE) is applied to~each token.}
+% \item{The~dot product attention is calculated inside each word for~~tokens included in~the~word.}
+% \item{Calculation of~the~score of~the~tokens within the~word.}
+% \item{Thvectors of~token representation within a~single word are aggregated.}
+% \item{The~application of positional encoding is repeated once again.}
+% \item{The~resulting tensor is processed by~four transformer encoder blocks.}
+% \item{The obtained encoding results are processed by a feed-forward network with ~ one hidden layer.}
+% \end{enumerate}
+% \end{frame}
+
+
+% \begin{frame}
+% \frametitle{Proposed pipeline}
+% \framesubtitle{Graphical explanation of proposed architecture}
+% \begin{figure}
+% \centering
+% \includegraphics[height=5cm,keepaspectratio]{processing_pipeline.png}
+% \end{figure}
+% \end{frame}
+
 
 \begin{frame}
 \frametitle{Proposed pipeline}
-\framesubtitle{Graphical explanation of proposed architecture}
-\begin{figure}[h]
-\includegraphics[width=9cm,height=5cm,keepaspectratio]{arch.pdf}
-\end{figure}
+\framesubtitle{  Graphical explanation of proposed architecture}
+\vspace*{0.3cm} % верхний отступ
+\centering
+\includegraphics[height=\dimexpr\textheight-0.8cm\relax, keepaspectratio]{processing_pipeline.png}
+\vspace*{0.3cm} % нижний отступ
 \end{frame}
+
+
+\begin{frame}
+\frametitle{Key Design Choises}
+\begin{itemize}
+\item BPE Tokenization → Open dictionary support
+\item Optimal dictionary size: 2,198 tokens
+\item Max 6 subwords per word (covers 98\% of cases)
+\item Weighted aggregation (attention-based) → Preserves prefixes/suffixes
+\end{itemize}
+
 
 \begin{frame}
 \frametitle{Model and training}
-\framesubtitle{Technical details of~the~model and its training}
-
+\framesubtitle{  Technical details of~the~model and its training dataset}
 \begin{block}{Model}
-The~resulting model has the~size of 195MB and has  48792985 weight parameters.
+The~resulting model has the~size of 195MB and has around 48M weight parameters.
 \end{block}
-
 \begin{block}{Training}
-The~training process takes approximately 8--12 hours.
-The~AdamW optimizer is used with $\lambda = 1e-5$.
-The~batch size is equal to 96.
-The training process includes 35 epochs with a change in the learning rate in three stages:
-for the first 15 epochs, the learning rate was 1e-4;
-followed by 10 epochs of learning rate 5e-5;
-then 10 more epochs of learning rate 1e-5.
+For the training we used UD SynTagRus ver.~2.16 and UD Taiga ver.~2.17.
+Merging them gave us nearly 190,000 training sentences.
+The~training process takes approximately 10 hours on a single RTX4090 GPU and consist of 35 epochs.
+As an optimizer we used AdamW.
 \end{block}
 \end{frame}
 
-\begin{frame}
-\frametitle{Datasets}
-\framesubtitle{  UD SynTagRus ver.~2.16 and UD Taiga ver.~2.17}
 
-\begin{columns}[T]
-\begin{column}{0.48\textwidth}
+% \begin{frame}
+% \frametitle{Datasets}
+% \framesubtitle{  UD SynTagRus ver.~2.16 and UD Taiga ver.~2.17}
 
-SynTagRus samples:
+% \begin{columns}[T]
+% \begin{column}{0.48\textwidth}
+
+% SynTagRus samples:
   
-\begin{itemize}
-\item { 
-Train:
-69629 sentences  total,
-1205821 words total,
-average sentence length is  17.32 words
-}
-\item {
-Dev:
-8906 sentences total,
-153585 words total,
-average sentence length is  17.25 words
-}
-\item {
-Test:
-8800 sentences total,
-157978 words total,
-average sentence length is  17.95 words
-}
-\end{itemize}
-\end{column}
+% \begin{itemize}
+% \item { 
+% Train:
+% 69629 sentences  total,
+% 1205821 words total,
+% average sentence length is  17.32 words
+% }
+% \item {
+% Dev:
+% 8906 sentences total,
+% 153585 words total,
+% average sentence length is  17.25 words
+% }
+% \item {
+% Test:
+% 8800 sentences total,
+% 157978 words total,
+% average sentence length is  17.95 words
+% }
+% \end{itemize}
+% \end{column}
 
-  \begin{column}{0.48\textwidth}
-Taiga samples:
+%   \begin{column}{0.48\textwidth}
+% Taiga samples:
   
-\begin{itemize}
-\item {
-Train:
-119407 sentences total,
-1717332 words total,
-average sentence length is  14.38 words
-}
-\item {
-Dev:
-1260 sentences total,
-15624 words total,
-average sentence length is  12.4 words
-}
-\item {
-Test:
-1217 sentences total,
-15440 words total,
-average sentence length is 12.69 words
-}
-\end{itemize}
-\end{column}
-\end{columns}
-\end{frame}
+% \begin{itemize}
+% \item {
+% Train:
+% 119407 sentences total,
+% 1717332 words total,
+% average sentence length is  14.38 words
+% }
+% \item {
+% Dev:
+% 1260 sentences total,
+% 15624 words total,
+% average sentence length is  12.4 words
+% }
+% \item {
+% Test:
+% 1217 sentences total,
+% 15440 words total,
+% average sentence length is 12.69 words
+% }
+% \end{itemize}
+% \end{column}
+% \end{columns}
+% \end{frame}
+
 
 \begin{frame}
 \frametitle{Computational experiment}
-\  framesubtitle{Accuracy, recall and other metrics for~classification}
+\framesubtitle{Accuracy, recall and other metrics for~classification}
 
 \begin{table}[tb]
 \centering
 \begin{tabular}{r|ccccc}
     Feature & Accuracy & \begin{tabular}{@{}c@{}} Sentence  \\ accuracy \end{tabular} & Precision & Recall & F1 \\
     \hline \\
- upos & 0.98463 & 0.77898 & 0.96833 & 0.96679 & 0.96684  \\
+ POS & 0.98463 & 0.77898 & 0.96833 & 0.96679 & 0.96684  \\
 %head & 0.91923 & 0.48346 & 0.88273 & 0.88545 & 0.87740  \\
 %deprel & 0.94271 & 0.47067 & 0.82724 & 0.84452 & 0.82797  \\
 Mood & 0.99874 & 0.97944 & 0.94718 & 0.96784 & 0.95057  \\
@@ -213,11 +250,10 @@ PronType & 0.99495 & 0.91836 & 0.90288 & 0.90052 & 0.89366  \\
 Voice & 0.99579 & 0.92929 & 0.96404 & 0.96103 & 0.96189  \\
       \end{tabular}
 \end{table}
-  \end{frame}
+\end{frame}
+
 
 \begin{frame}
-
-  \frametitle{Thank you!}
-  \end{frame}
-
+\frametitle{Thank you!}
+\end{frame}
 \end{document}
