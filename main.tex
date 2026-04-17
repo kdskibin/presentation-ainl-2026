@@ -1,15 +1,16 @@
 \documentclass{beamer}
 
 \usepackage[russian]{babel}
+\usepackage[T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{cmap}
 \usepackage{graphicx}
 \usepackage{xspace}
 \usepackage{psfrag}
-\usepackage{hyperref}
 \usepackage[normalem]{ulem}
 \usepackage{multicol}
-\usepackage{tikz} 
+\usepackage{tikz}
+\usepackage{hyperref}
 
 \beamertemplatenavigationsymbolsempty
 \setbeamertemplate{footline}[frame number]
@@ -98,13 +99,13 @@ BERT implies a~heavy training process, although it also contains multi-head atte
 \frametitle{Graphical explanation of proposed architecture}
 \begin{figure}
 \centering
-\includegraphics[height=7cm,keepaspectratio]{processing_pipeline.png}
+\includegraphics[height=7.5cm,keepaspectratio]{processing_pipeline_2.png}
 \end{figure}
 \end{frame}
 
 
 \begin{frame}
-\frametitle{Key Design Choises}
+\frametitle{Key Design Choices}
 \begin{itemize}
 \item BPE Tokenization → Open dictionary support
 \item Optimal dictionary size: 2,198 tokens
@@ -150,7 +151,7 @@ As an optimizer we used AdamW.
 Mood & 0.99874 & 0.97944 & 0.94718 & 0.96784 & 0.95057  \\
 %NumType & 0.99758 & 0.96008 & 0.85935 & 0.90408 & 0.87672  \\
 VerbForm & 0.99781 & 0.96325 & 0.98734 & 0.98938 & 0.98805  \\
-ExtPos & 0.99828 & 0.97152 & 0.74604 & 0.79496 & 0.75973  \\
+% ExtPos & 0.99828 & 0.97152 & 0.74604 & 0.79496 & 0.75973  \\
 %Reflex & 0.99974 & 0.99558 & 0.97378 & 0.99896 & 0.98476  \\
 %Polarity & 0.99443 & 0.91508 & 0.70643 & 0.80416 & 0.73642  \\
 %Typo & 0.99997 & 0.99954 & 0.97825 & 0.97825 & 0.97825  \\
@@ -190,5 +191,12 @@ Voice & 0.99579 & 0.92929 & 0.96404 & 0.96103 & 0.96189  \\
 
 \begin{frame}
 \frametitle{Thank you for your attention!}
+\centering
+\begin{block}{Code:}
+\begin{figure}
+\url{https://github.com/kdskibin/morph_tagger}\\[1em]
+\includegraphics[height=6cm,keepaspectratio]{qr_code.png}
+\end{figure}
+\end{block}
 \end{frame}
 \end{document}
